@@ -1,0 +1,24 @@
+#%RAML 1.0
+title: Exp-customer
+description: "to get/insert data into a customer database"
+/customer/{customer_id}:
+  get:
+    responses:
+      200:
+        body:
+          application/xml:
+            example:
+              {
+                "cname":"cname",
+                "cid":"3"
+              }
+/customer:
+  post:
+    responses:
+      201:
+        body:
+          application/xml:
+            example:
+              {
+                "message":"inserted successfully"
+              }

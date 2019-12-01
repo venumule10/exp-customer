@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="8de6658f-5d2a-4a4e-9581-a74756b99c47" file="properties/${mule.env}.properties" key="${secret}" >
+		<secure-properties:encrypt algorithm="Blowfish" />
+	</secure-properties:config>
+	<global-property doc:name="Global Property" doc:id="190b950e-313a-4480-8080-e1872dfedca6" name="mule.env" value="dev" />
+	<global-property doc:name="Global Property" doc:id="143053d4-3c2d-4d62-bd10-20645446e916" name="secret" value="123456" />
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="76ea4012-e289-4814-a90b-ee42ac02e8a4" basePath="${secure::sys.customer.basepath}" >
+		<http:request-connection host="${secure::sys.customer.host}" port="${secure::sys.customer.port}" streamResponse="true" >
+			<http:authentication >
+				<http:basic-authentication username="${secure::sys.customer.client_id}" password="${secure::sys.customer.client_secret}" />
+			</http:authentication>
+		</http:request-connection>
+	</http:request-config>
+	<api-gateway:autodiscovery apiId="${secure::exp.customer.api_id}" doc:name="API Autodiscovery" doc:id="4a21246c-c0aa-4848-8feb-6f267a78c31d" flowRef="exp-customer-main" />
+</mule>
